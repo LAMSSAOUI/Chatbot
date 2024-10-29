@@ -1,0 +1,33 @@
+<form id="recipeForm">
+    <input type="text" id="query" placeholder="Enter ingredient or dish name" required>
+    <button type="submit">Get Recipes</button>
+</form>
+
+<div id="results"></div>
+
+<script>
+    document.getElementById('recipeForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const query = document.getElementById('query').value;
+        fetch(`/chatbot/get-recipe/?query=${query}`)
+            .then(response => response.json())
+            .then(data => {
+                const resultsDiv = document.getElementById('results');
+                resultsDiv.innerHTML = ''; // Clear previous results
+                if (data.recipes) {
+                    data.recipes.forEach(recipe => {
+                        resultsDiv.innerHTML += `<div>
+                            <h3>${recipe.label}</h3>
+                            <p>Ingredients: ${recipe.ingredients.join(', ')}</p>
+                            <a href="${recipe.url}" target="_blank">View Recipe</a>
+                        </div>`;
+                    });
+                } else {
+                    resultsDiv.innerHTML = `<p>${data.error}</p>`;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    });
+</script>
