@@ -43,3 +43,5 @@ def get_recipe(request):
 
 def login(request) :
     return render(request, 'chatbot/login.html')
+def signup(request) :
+    return render(request, 'chatbot/signup.html')
