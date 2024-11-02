@@ -4,6 +4,8 @@ import requests
 import os
 from dotenv import load_dotenv
 from .models import Users
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
 
 
 load_dotenv()
@@ -43,8 +45,24 @@ def get_recipe(request):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
-def login(request) :
+def login_view(request):
+    if request.method == 'POST':  # Check if the request is a POST request
+        username = request.POST.get('username')  # Get the username from the form
+        password = request.POST.get('password')  # Get the password from the form
+
+        # Search for the user in the custom Users table
+        user = Users.objects.filter(name=username, password=password).first() 
+        print('this is the user ', user) # Get the first matching user
+        if user:  # If a user is found
+            print('User successfully logged in')  # Debug message
+            # Perform any session management or additional logic here
+            return redirect('index')  # Replace 'index' with the name of your homepage URL pattern
+        else:
+            messages.error(request, 'Invalid username or password')  # Show error if user does not exist
+
     return render(request, 'chatbot/login.html')
+
+
 def signup(request) :
     return render(request, 'chatbot/signup.html')
 
