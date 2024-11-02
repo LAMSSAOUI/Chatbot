@@ -20,6 +20,7 @@
                             <h3>${recipe.label}</h3>
                             <p>Ingredients: ${recipe.ingredients.join(', ')}</p>
                             <a href="${recipe.url}" target="_blank">View Recipe</a>
+                            <button onclick="addToFavorites('${recipe.label}')">❤️ Add to Favorites</button>
                         </div>`;
                     });
                 } else {
@@ -30,4 +31,42 @@
                 console.error('Error:', error);
             });
     });
+
+    function addToFavorites(recipeName) {
+        console.log('recipeName' , recipeName)
+        fetch('http://127.0.0.1:8000/chatbot/add-favorite/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ recipe_name: recipeName }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                alert(data.message);
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Check if this cookie string begins with the desired cookie name
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
 </script>

@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import get_recipe, index , login , signup , add_user , login_view
+from .views import get_recipe, index , login , signup , add_user , login_view , add_favorite
 
 urlpatterns = [
     path('', index, name='index'),
@@ -9,4 +9,5 @@ urlpatterns = [
     path('signup/', signup ),
     path('add-user/', add_user, name='add_user'),
     # path('success/', success, name='success'),  
+    path('add-favorite/', add_favorite, name='add_favorite'),
 ]

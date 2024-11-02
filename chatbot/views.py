@@ -6,12 +6,16 @@ from dotenv import load_dotenv
 from .models import Users
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
+import json
 
 
 load_dotenv()
 
 EDAMAM_APP_ID = os.getenv('EDAMAM_APP_ID')
 EDAMAM_APP_KEY = os.getenv('EDAMAM_APP_KEY')
+
 
 
 def index(request):
@@ -54,6 +58,7 @@ def login_view(request):
         user = Users.objects.filter(name=username, password=password).first() 
         print('this is the user ', user) # Get the first matching user
         if user:  # If a user is found
+            request.session['user_id'] = user.id
             print('User successfully logged in')  # Debug message
             # Perform any session management or additional logic here
             return redirect('index')  # Replace 'index' with the name of your homepage URL pattern
@@ -89,3 +94,25 @@ def add_user(request):
 
 # def success(request):
 #     return render(request, 'success.html')
+
+@csrf_exempt  # This is for testing; remove for production use or use CSRF tokens
+def add_favorite(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        recipe_name = data.get('recipe_name')
+
+        if recipe_name:
+            user_id = request.session.get('user_id')  # Get user ID from session
+            user = Users.objects.get(id=user_id)  # Retrieve user object
+
+            # Add the recipe name to the user's favorites if it isn't already there
+            if recipe_name not in user.favorites:
+                user.favorites.append(recipe_name)
+                user.save()
+                return JsonResponse({'status': 'success', 'message': 'Recipe added to favorites!'})
+            else:
+                return JsonResponse({'status': 'error', 'message': 'Recipe already in favorites!'})
+        else:
+            return JsonResponse({'status': 'error', 'message': 'No recipe name provided!'}, status=400)
+
+    return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
