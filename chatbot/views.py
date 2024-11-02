@@ -40,3 +40,6 @@ def get_recipe(request):
 
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
+
+def login(request) :
+    return render(request, 'chatbot/login.html')
