@@ -1,8 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render , redirect
 from django.http import JsonResponse
 import requests
 import os
 from dotenv import load_dotenv
+from .models import Users
+
 
 load_dotenv()
 
@@ -45,3 +47,27 @@ def login(request) :
     return render(request, 'chatbot/login.html')
 def signup(request) :
     return render(request, 'chatbot/signup.html')
+
+
+
+def add_user(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        # Optional: Set some default favorites if desired, or let it be empty
+        favorites = []
+
+        # Create a new user
+        new_user = Users(name=name, email=email, password=password, favorites=favorites)
+        new_user.save()
+
+        # Redirect to a success page or the same form with a success message
+          # Replace 'success' with your actual success page URL name
+
+        return render(request, 'chatbot/index.html')
+    return redirect('chatbot/404.html') # Replace with your actual template name
+
+
+# def success(request):
+#     return render(request, 'success.html')
