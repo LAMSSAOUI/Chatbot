@@ -1,9 +1,33 @@
-<form id="recipeForm">
-    <input type="text" id="query" placeholder="Enter ingredient or dish name" required>
-    <button type="submit">Get Recipes</button>
-</form>
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+<body class="flex flex-row justify-center h-[90vh] items-center gap-4">
 
-<div id="results"></div>
+<form id="recipeForm" class="flex flex-col justify-between gap-2 w-1/2  ">
+    <div class=" flex flex-row justify-center gap-2 relative mb-4">
+        <input
+        id="query"
+        type="text"
+        placeholder="Type here"
+        required
+        class="input  input-primary w-1/2" /> 
+        <!-- <button t></button> -->
+        <button class="btn btn-outline btn-success" type="submit">Get Recipes</button>
+    </div>
+</form>
+<div id="results" class="w-1/2 "></div>
+
+
+
+
 
 <script>
     document.getElementById('recipeForm').addEventListener('submit', function(e) {
@@ -16,12 +40,20 @@
                 resultsDiv.innerHTML = ''; // Clear previous results
                 if (data.recipes) {
                     data.recipes.forEach(recipe => {
-                        resultsDiv.innerHTML += `<div>
-                            <h3>${recipe.label}</h3>
-                            <p>Ingredients: ${recipe.ingredients.join(', ')}</p>
-                            <a href="${recipe.url}" target="_blank">View Recipe</a>
-                            <button onclick="addToFavorites('${recipe.label}')">❤️ Add to Favorites</button>
-                        </div>`;
+                        resultsDiv.innerHTML += `
+                        
+                    <div class="bg-white shadow-md rounded-lg p-4 mb-4">
+                        <h3 class="text-xl font-bold text-gray-800">${recipe.label}</h3>
+                        
+                        <p class="text-gray-600 mt-2">Ingredients: ${recipe.ingredients.join(', ')}</p>
+                        <a href="${recipe.url}" target="_blank" class="text-blue-500 hover:underline mt-2 inline-block">View Recipe</a>
+                        <button 
+                            onclick="addToFavorites('${recipe.label}')" 
+                            class="mt-2 bg-green-500 text-white rounded-full px-4 py-2 hover:bg-green-600 transition">
+                            ❤️ Add to Favorites
+                        </button>
+                    </div>`;
+
                     });
                 } else {
                     resultsDiv.innerHTML = `<p>${data.error}</p>`;
@@ -70,3 +102,11 @@
         return cookieValue;
     }
 </script>
+    
+</body>
+</html>
+
+
+
+
+

@@ -29,7 +29,7 @@ def get_recipe(request):
         return JsonResponse({'error': 'Query parameter is required.'}, status=400)
 
     try:
-        url = f"https://api.edamam.com/search?q={query}&app_id={EDAMAM_APP_ID}&app_key={EDAMAM_APP_KEY}&from=0&to=10"  # Fetch 10 recipes
+        url = f"https://api.edamam.com/search?q={query}&app_id={EDAMAM_APP_ID}&app_key={EDAMAM_APP_KEY}&from=0&to=3"  # Fetch 10 recipes
         response = requests.get(url)
         data = response.json()
 
@@ -40,7 +40,8 @@ def get_recipe(request):
                 recipes.append({
                     'label': recipe['label'],
                     'ingredients': recipe['ingredientLines'],
-                    'url': recipe['url']
+                    'url': recipe['url'],
+                    'image': recipe['image'] 
                 })
             return JsonResponse({'recipes': recipes})
         else:
