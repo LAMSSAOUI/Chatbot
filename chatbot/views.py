@@ -117,3 +117,24 @@ def add_favorite(request):
             return JsonResponse({'status': 'error', 'message': 'No recipe name provided!'}, status=400)
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
+
+
+# views.py
+
+def view_favorites(request):
+    # Check if there is a user logged in (user ID stored in session)
+    user_id = request.session.get('user_id')
+    
+    if user_id:
+        try:
+            # Retrieve the user from the database based on user_id
+            user = Users.objects.get(id=user_id)
+            favorites = user.favorites  # Get the list of favorites from the user's data
+        except Users.DoesNotExist:
+            favorites = []
+            # Optional: Log an error or handle the case where user is not found
+    else:
+        # If no user is logged in, set favorites to an empty list or handle differently
+        favorites = []
+
+    return render(request, 'chatbot/favorites.html', {'favorites': favorites})

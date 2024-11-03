@@ -41,16 +41,17 @@
                 if (data.recipes) {
                     data.recipes.forEach(recipe => {
                         resultsDiv.innerHTML += `
-                        
                     <div class="bg-white shadow-md rounded-lg p-4 mb-4">
                         <h3 class="text-xl font-bold text-gray-800">${recipe.label}</h3>
-                        
                         <p class="text-gray-600 mt-2">Ingredients: ${recipe.ingredients.join(', ')}</p>
                         <a href="${recipe.url}" target="_blank" class="text-blue-500 hover:underline mt-2 inline-block">View Recipe</a>
                         <button 
                             onclick="addToFavorites('${recipe.label}')" 
                             class="mt-2 bg-green-500 text-white rounded-full px-4 py-2 hover:bg-green-600 transition">
                             ❤️ Add to Favorites
+                        </button>
+                        <button onclick="window.location.href='favorites/'" class="mt-2 bg-green-500 text-white rounded-full px-4 py-2 hover:bg-green-600 transition">
+                            View my favorites
                         </button>
                     </div>`;
 
